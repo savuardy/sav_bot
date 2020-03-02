@@ -3,11 +3,12 @@ import schedule
 import requests
 import json
 from telegram.ext import Updater
+from telegram.ext import ConversationHandler
 from telegram.ext import CommandHandler
 from telegram.ext import MessageHandler, Filters
-from telegram.ext import ConversationHandler
 import logging
-import tele_func 
+import tele_func
+import  database
 
 logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      level=logging.INFO) #This is a good time to set up the logging module, so you will know when (and why) things don't work as expected

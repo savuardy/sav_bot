@@ -6,7 +6,7 @@ from telegram.ext import CommandHandler
 from telegram.ext import MessageHandler, Filters
 from telegram.ext import ConversationHandler
 import logging
-
+import database
 keys = json.load(open("keys.json"))
 bot_api_key = keys["bot_api_key"]
 appid = keys["appid_key"]
@@ -17,13 +17,15 @@ dispatcher = updater.dispatcher
 
 def start(update, context): #start command handler  func gives the "hello"-message
     context.bot.send_message(chat_id = update.effective_chat.id, text = "I'm a bot, that will help you with everyday morning forecast. Use /add_city or /add_city_geo")
+    database.new_user_reg(update.effective_chat.id)
 
 def add_city(update, context):
     user_says = " ".join(context.args)
     city_mode(update,context, user_says)
 
-# def add_city_geo(update, context):
-#     prev_answer = update.message.text
+#def add_city_geo(update, context):
+
+
 
 def unknown(update, context):#unknow command handler is
     context.bot.send_message(chat_id=update.effective_chat.id, text="Sorry, I didn't understand that command.")
@@ -55,12 +57,9 @@ def city_mode(update, context,text):
         city = text
         result = requests.get("https://api.openweathermap.org/data/2.5/weather?q={}&appid={}".format(city,appid))
         weather_text_response(update, context, result)
+        database.adding_city_text(city, update.effective_chat.id)
     except Exception as ex:
         print(ex)
-
-# def convo_branch(update, context):
-#     if update.message.text is not None:
-#         city_mode(update, context)
 
 
     
